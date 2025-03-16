@@ -1,0 +1,315 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Check API
+  description: To check whether the API is running or not
+- name: Comment Management
+  description: APIs for managing comments on posts
+- name: Post API
+  description: Endpoints for managing posts
+- name: User API
+  description: Operations related to User Management
+- name: Like Management
+  description: APIs for managing likes on posts
+paths:
+  /posts/{id}:
+    get:
+      tags:
+      - Post API
+      summary: Get post by ID
+      operationId: getPostById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Post"
+    put:
+      tags:
+      - Post API
+      summary: Update a post
+      operationId: updatePost
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+      - Post API
+      summary: Delete a post
+      operationId: deletePost
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /users/register:
+    post:
+      tags:
+      - User API
+      summary: Create a new user
+      description: Registers a new user with email and password.
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /users/login:
+    post:
+      tags:
+      - User API
+      summary: User Login
+      description: Allows a user to log in with email and password.
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /posts:
+    get:
+      tags:
+      - Post API
+      summary: Get paginated posts
+      operationId: getPosts
+      parameters:
+      - name: page
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: size
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+    post:
+      tags:
+      - Post API
+      summary: Create a new post
+      operationId: createPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /likes/{postId}/{userId}:
+    post:
+      tags:
+      - Like Management
+      summary: Like a post
+      operationId: addLike
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /comments:
+    post:
+      tags:
+      - Comment Management
+      summary: Add a new comment
+      operationId: addComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Comment"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /likes/{postId}:
+    get:
+      tags:
+      - Like Management
+      summary: Get like count
+      operationId: getLikeCount
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int32
+  /health-check:
+    get:
+      tags:
+      - Check API
+      summary: Checks the API
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /comments/post/{postId}:
+    get:
+      tags:
+      - Comment Management
+      summary: Get comments for a post
+      operationId: getComments
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+components:
+  schemas:
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+        content:
+          type: string
+        userId:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        email:
+          type: string
+        password:
+          type: string
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        postId:
+          type: integer
+          format: int32
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        userId:
+          type: integer
+          format: int32
