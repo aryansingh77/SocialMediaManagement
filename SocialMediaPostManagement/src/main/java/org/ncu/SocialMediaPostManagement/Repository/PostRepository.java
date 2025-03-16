@@ -19,7 +19,7 @@ public class PostRepository {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("title", post.getTitle())
                 .addValue("content", post.getContent())
-                .addValue("userId", post.getUserId()); // 👈 Include user_id
+                .addValue("userId", post.getUserId()); 
         return jdbcTemplate.update(sql, params);
     }
 
