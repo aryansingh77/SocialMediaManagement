@@ -26,7 +26,7 @@ public class Post {
     }
 
     public Post() {
-        this.createdAt = LocalDateTime.now(); // Auto-set creation time
+        this.createdAt = LocalDateTime.now(); 
     }
 
     public String getTitle() {
